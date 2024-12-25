@@ -15,7 +15,7 @@ class Lesson(models.Model):
                                verbose_name='курс', **NULLABLE)
 
     def __str__(self):
-        return f'{self.title} - {self.description}'
+        return f'{self.title}'
 
     class Meta:
         verbose_name = 'урок'
@@ -30,7 +30,7 @@ class Course(models.Model):
                               verbose_name='пользователь', **NULLABLE)
 
     def __str__(self):
-        return f'{self.title} - {self.description}'
+        return f'{self.title}'
 
     class Meta:
         verbose_name = 'курс'
