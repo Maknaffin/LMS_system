@@ -3,6 +3,14 @@ from django.db import models
 
 NULLABLE = {'blank': True, 'null': True}
 
+PAY_CASH = 'Наличные'
+PAY_CARD = 'Перевод на счет'
+
+PAYMENT_CHOICES = (
+    ('PAY_CASH', 'Наличные'),
+    ('PAY_CARD', 'Перевод на счет'),
+)
+
 
 class Lesson(models.Model):
     title = models.CharField(max_length=200, verbose_name='название урока')
@@ -35,3 +43,21 @@ class Course(models.Model):
     class Meta:
         verbose_name = 'курс'
         verbose_name_plural = 'курсы'
+
+
+class Payments(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+                             verbose_name='пользователь', **NULLABLE, related_name='payment')
+    payment_date = models.DateTimeField(auto_now_add=True, verbose_name='дата оплаты')
+    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='оплаченный курс', **NULLABLE)
+    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name='оплаченный урок', **NULLABLE)
+    payment_amount = models.PositiveIntegerField(verbose_name='сумма оплаты')
+    payment_method = models.CharField(choices=PAYMENT_CHOICES, default=PAY_CARD, max_length=10,
+                                      verbose_name='способ оплаты')
+
+    def __str__(self):
+        return f'{self.user}: {self.paid_course if self.paid_course else self.paid_lesson} - {self.payment_amount}'
+
+    class Meta:
+        verbose_name = 'платеж'
+        verbose_name_plural = 'платежи'
