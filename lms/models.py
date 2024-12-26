@@ -4,11 +4,11 @@ from django.db import models
 NULLABLE = {'blank': True, 'null': True}
 
 PAY_CASH = 'Наличные'
-PAY_CARD = 'Перевод на счет'
+PAY_CARD = 'Карта'
 
 PAYMENT_CHOICES = (
     ('PAY_CASH', 'Наличные'),
-    ('PAY_CARD', 'Перевод на счет'),
+    ('PAY_CARD', 'Карта'),
 )
 
 
@@ -23,7 +23,7 @@ class Lesson(models.Model):
                                verbose_name='курс', **NULLABLE)
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title} {self.description}'
 
     class Meta:
         verbose_name = 'урок'
@@ -38,14 +38,14 @@ class Course(models.Model):
                               verbose_name='пользователь', **NULLABLE)
 
     def __str__(self):
-        return f'{self.title}'
+        return f'{self.title} {self.description}'
 
     class Meta:
         verbose_name = 'курс'
         verbose_name_plural = 'курсы'
 
 
-class Payments(models.Model):
+class Payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
                              verbose_name='пользователь', **NULLABLE, related_name='payment')
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name='дата оплаты')
