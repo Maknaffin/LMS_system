@@ -1,0 +1,7 @@
+[tool.black]
+line-length = 110
+exclude = '''
+    tests/
+    poetry.lock/
+    pyproject.toml/
+'''
